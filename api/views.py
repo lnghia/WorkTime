@@ -6,6 +6,16 @@ from rest_framework.response import Response
 
 # Create your views here.
 
-@api_view(http_method_names=['GET'])
+
+@api_view(['GET'])
 def index(request):
     return Response({'msg': 'testing'})
+
+
+@api_view(['GET'])
+def api_root(request):
+    data = {
+        'index': 'https://worktime-management.herokuapp.com/api/',
+    }
+
+    return Response(data)
