@@ -24,12 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '0yz04(%a^xuilqa8*@e^e)bj+n%&+jou=tg$%lb&#ox!lk1!x5'
-SECRET_KEY = os.environ.get('SECRET_KEY', '0yz04(%a^xuilqa8*@e^e)bj+n%&+jou=tg$%lb&#ox!lk1!x5')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', '0yz04(%a^xuilqa8*@e^e)bj+n%&+jou=tg$%lb&#ox!lk1!x5')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '') != 'False'
 
-ALLOWED_HOSTS=['worktime-management.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['worktime-management.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -132,6 +133,21 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
+# Media root
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Email config
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', 'hvpmorhnmsuqeodv')
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER', 'valorantemail20@gmail.com')
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# CSRF enable
+CSRF_COOKIE_SECURE = True
