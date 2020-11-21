@@ -1,6 +1,6 @@
 from os import name
 from rest_framework.decorators import api_view
-from ..Serializers.Worker import WorkerSerializer
+from ..Serializers import WorkerSerializer
 from rest_framework.response import Response
 from django.http import JsonResponse
 from ..Constants.Response import response, make_response
@@ -25,4 +25,4 @@ def register_worker(request):
             return JsonResponse(make_response(1,{'id': new_worker.id}, None))
         return JsonResponse(make_response(0, None, request_data.errors))
     except:
-        return JsonResponse(make_response(0, None, ['server error']))
+        return JsonResponse(make_response(0, None, 'server error'))
