@@ -1,4 +1,5 @@
 # from api.Util.User import new_user
+from rest_framework.authtoken.models import Token
 from api.Util.User_Util import new_user
 from django.db import models
 from django.conf import settings
@@ -7,6 +8,8 @@ from ..Util import User_Util
 import secrets
 import string
 from datetime import date, datetime
+from django.contrib.auth.models import Group
+from django.contrib.auth import authenticate
 
 class Worker(models.Model):
     name = models.CharField(max_length=50, blank=False)
@@ -16,9 +19,11 @@ class Worker(models.Model):
 
     @staticmethod
     def create_account(email):
+        worker_group = Group.objects.get(name='worker')
         username = email
         password = User_Util.generate_password()
         new_user = User_Util.new_user(username, email, password)
+        worker_group.user_set.add(new_user)
         return username, password, new_user
 
     @staticmethod
@@ -39,3 +44,10 @@ class Worker(models.Model):
         else:
             today_shift[0].work_out = datetime.now().time()
             today_shift[0].save()
+
+    def verify_password(self, password):
+        return authenticate(username=self.email, password=password) is not None
+
+    def generate_token(self):
+        token, created = Token.objects.get_or_create(user=self.user)
+        return token
