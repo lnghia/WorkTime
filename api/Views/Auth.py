@@ -13,27 +13,28 @@ from rest_framework.authtoken.models import Token
 import sys
 
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @permission_required('api.add_worker')
 def register_worker(request):
     try:
         request_data = WorkerSerializer(data=request.data)
- 
+
         if request_data.is_valid():
             name = request_data['name'].value
             email = request_data['email'].value
 
             username, password, new_user = Worker.create_account(email)
-            new_worker = Worker.objects.create(name=name, email=email, user=new_user)
-            send_email('Account Initiated', email, {'username': username,
-                                                    'password': password})
-            return JsonResponse(make_response(1,{'id': new_worker.id}, None))
+            new_worker = Worker.objects.create(
+                name=name, email=email, user=new_user)
+            send_email('Account Initiated', email, 'mail/account_information',
+                       {'username': email, 'password': password})
+            return JsonResponse(make_response(1, {'id': new_worker.id}, None))
         return JsonResponse(make_response(0, None, request_data.errors))
     except:
         # print(sys.exc_info()[0])
         return JsonResponse(make_response(0, None, 'server error'))
+
 
 @api_view(['POST'])
 def login(request):
