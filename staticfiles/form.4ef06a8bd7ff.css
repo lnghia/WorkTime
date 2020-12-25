@@ -1,0 +1,11 @@
+.login-form{
+    margin: auto;
+    width: 350px;
+}
+
+.login-form-div{
+    margin: auto;
+    width: 400px;
+    height: 300px;
+    display: flex;
+}

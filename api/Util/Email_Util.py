@@ -10,9 +10,9 @@ def send_async_email(message):
     message.send()
 
 
-def send_email(subject, to, data):
-    content_html = render_to_string('mail/account_information.html', {'new_user': data})
-    content_txt = render_to_string('mail/account_information.txt', {'new_user': data})
+def send_email(subject, to, template, data):
+    content_html = render_to_string(template+'.html', data)
+    content_txt = render_to_string(template+'.txt', data)
 
     message = EmailMultiAlternatives(subject, content_txt, settings.EMAIL_HOST_USER, [to])
     message.attach_alternative(content_html, "text/html")

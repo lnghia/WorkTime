@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'rest_framework.authtoken',
+    'crispy_forms',
+    'web',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +130,10 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_DIR = os.path.join(BASE_DIR,'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
@@ -160,3 +166,7 @@ REST_FRAMEWORK = {
     ]
 }
 
+# Boostrap4
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.AllowAllUsersModelBackend', )
