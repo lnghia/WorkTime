@@ -17,6 +17,14 @@ class Worker(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
     email = models.EmailField(blank=False, unique=True)
 
+    class Meta:
+        permissions = (
+            ('add_worker', 'Can add worker'),
+            ('change_worker', 'Can change worker'),
+            ('delete_worker', 'Can delete worker'),
+            ('view_worker', 'Can view worker')
+        )
+
     @staticmethod
     def create_account(email):
         worker_group = Group.objects.get(name='worker')

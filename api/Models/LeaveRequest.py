@@ -8,3 +8,11 @@ class LeaveRequest(models.Model):
     leave_from = models.TimeField(blank=False)
     leave_to = models.TimeField(blank=False)
     approved = models.BooleanField(default=False)
+
+    class Meta:
+        permissions = (
+            ('add_leaverequest', 'Can add leave request'),
+            ('change_leaverequest', 'Can change leave request'),
+            ('delete_leaverequest', 'Can delete leave request'),
+            ('view_leaverequest', 'Can view leave request')
+        )
