@@ -17,6 +17,11 @@ class Worker(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
     email = models.EmailField(blank=False, unique=True)
 
+    # class Meta:
+    #     permissions = (
+    #         ('make_rollcall', 'Can make a roll call.')
+    #     )
+
     @staticmethod
     def create_account(email):
         worker_group = Group.objects.get(name='worker')
