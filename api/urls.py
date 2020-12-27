@@ -1,6 +1,6 @@
 from os import name
 from django.urls import path
-from .Views import api_root, index, register_worker, make_roll_call, login
+from .Views import *
 
 urlpatterns = [
     path('', view=index, name='api-index'),
@@ -8,4 +8,6 @@ urlpatterns = [
     path('new_worker/', view=register_worker, name='register-worker'),
     path('roll_call/', view=make_roll_call, name='make-roll-call'),
     path('login/', view=login, name='login'),
+    path('submit-photos/', view=submit_photos, name='submit-photos'),
+    path('identify-photo/', view=predict_photo, name='predict-photo'),
 ]

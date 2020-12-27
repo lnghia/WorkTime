@@ -1,8 +1,9 @@
-from api.Models.Worker import Worker
+from api.models.Worker import Worker
 from django.http.response import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from ..Constants.Response import make_response
 from ..Serializers import RollCallSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['POST'])
@@ -16,6 +17,7 @@ def punch_out(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def make_roll_call(request):
     try:
         request_data = RollCallSerializer(data=request.data)
@@ -27,6 +29,6 @@ def make_roll_call(request):
 
             return JsonResponse(make_response(1, None, None))
 
-        return JsonResponse(make_response(0, None, request_data.errors))
+        return JsonResponse(make_response(0, None, request_data.errors), status=400)
     except:
-        return JsonResponse(make_response(0, None, 'server error'))
+        return JsonResponse(make_response(0, None, 'server error'), status=500)
