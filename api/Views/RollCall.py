@@ -1,4 +1,4 @@
-from api.Models.Worker import Worker
+from api.models.Worker import Worker
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from ..Constants.Response import make_response

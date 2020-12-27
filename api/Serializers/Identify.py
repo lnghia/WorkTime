@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from ..Models import Worker
+from ..models import Worker
 
 class SubmitPhotoSerializer(serializers.BaseSerializer):
     def to_internal_value(self, data):

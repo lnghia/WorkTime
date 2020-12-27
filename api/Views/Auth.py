@@ -4,7 +4,7 @@ from ..Serializers import WorkerSerializer, LoginSerializer
 from rest_framework.response import Response
 from django.http import JsonResponse
 from ..Constants.Response import response, make_response
-from ..Models.Worker import Worker
+from ..models import Worker
 from ..Util.User_Util import new_user
 from ..Util.Email_Util import send_email
 from rest_framework.permissions import IsAuthenticated
