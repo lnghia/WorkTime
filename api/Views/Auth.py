@@ -4,7 +4,7 @@ from ..Serializers import WorkerSerializer, LoginSerializer
 from rest_framework.response import Response
 from django.http import JsonResponse
 from ..Constants.Response import response, make_response
-from ..Models.Worker import Worker
+from ..models import Worker
 from ..Util.User_Util import new_user
 from ..Util.Email_Util import send_email
 from rest_framework.permissions import IsAuthenticated
@@ -17,6 +17,12 @@ import sys
 @permission_classes([IsAuthenticated])
 @permission_required('api.add_worker')
 def register_worker(request):
+    email = request.data.get('email')
+    if email is not None:
+        if Worker.objects.filter(email=email).exists():
+            worker = Worker.objects.get(email=email)
+            return JsonResponse(make_response(1, {'id': worker.id}, None))
+    
     try:
         request_data = WorkerSerializer(data=request.data)
 
@@ -30,10 +36,10 @@ def register_worker(request):
             send_email('Account Initiated', email, 'mail/account_information',
                        {'username': email, 'password': password})
             return JsonResponse(make_response(1, {'id': new_worker.id}, None))
-        return JsonResponse(make_response(0, None, request_data.errors))
+        return JsonResponse(make_response(0, None, request_data.errors), status=400)
     except:
         # print(sys.exc_info()[0])
-        return JsonResponse(make_response(0, None, 'server error'))
+        return JsonResponse(make_response(0, None, 'server error'), status=500)
 
 
 @api_view(['POST'])
@@ -48,10 +54,10 @@ def login(request):
                     token = worker.generate_token()
                     return JsonResponse(make_response(1, {'token': str(token)}, None))
                 # print(sys.exc_info()[0])
-                return JsonResponse(make_response(0, None, 'invalid username or password'))
+                return JsonResponse(make_response(0, None, 'invalid username or password'), status=404)
             except:
                 # print(sys.exc_info()[0])
-                return JsonResponse(make_response(0, None, 'invalid username or password'))
-        return JsonResponse(make_response(0, None, request_data.errors))
+                return JsonResponse(make_response(0, None, 'invalid username or password'), status=404)
+        return JsonResponse(make_response(0, None, request_data.errors), status=400)
     except:
-        return JsonResponse(make_response(0, None, 'server error'))
+        return JsonResponse(make_response(0, None, 'server error'), status=500)
