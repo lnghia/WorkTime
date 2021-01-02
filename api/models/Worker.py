@@ -8,14 +8,18 @@ from ..Util import User_Util
 import secrets
 import string
 from datetime import date, datetime
+import datetime as dt
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate
+
 
 class Worker(models.Model):
     name = models.CharField(max_length=50, blank=False)
     # image = models.ImageField(upload_to='worker_images/', max_length=100)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
     email = models.EmailField(blank=False, unique=True)
+    start_of_month = models.DateField(blank=True, null=True, auto_now_add=True)
 
     # class Meta:
     #     permissions = (
@@ -41,7 +45,7 @@ class Worker(models.Model):
 
     def make_roll_call(self):
         today = datetime.today().strftime('%Y-%m-%d')
-        
+
         today_shift = self.time_sheet.filter(date=today)
 
         if not len(today_shift):
@@ -56,3 +60,13 @@ class Worker(models.Model):
     def generate_token(self):
         token, created = Token.objects.get_or_create(user=self.user)
         return token
+
+    def day_num_since_start_of_month(self, d2):
+        d1 = self.start_of_month
+        return (d2-d1).days
+
+    def update_start_of_month(self, curr_date):
+        # print(self.day_num_since_start_of_month(curr_date))
+        if self.day_num_since_start_of_month(curr_date) > 28:
+            self.start_of_month += dt.timedelta(days=28)
+            self.save()

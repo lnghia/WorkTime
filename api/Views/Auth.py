@@ -8,6 +8,7 @@ from ..models import Worker
 from ..Util.User_Util import new_user
 from ..Util.Email_Util import send_email
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import permission_required
 from rest_framework.authtoken.models import Token
 import sys
@@ -25,11 +26,11 @@ def register_worker(request):
     
     try:
         request_data = WorkerSerializer(data=request.data)
-
+        
         if request_data.is_valid():
             name = request_data['name'].value
             email = request_data['email'].value
-
+            
             username, password, new_user = Worker.create_account(email)
             new_worker = Worker.objects.create(
                 name=name, email=email, user=new_user)
@@ -37,7 +38,8 @@ def register_worker(request):
                        {'username': email, 'password': password})
             return JsonResponse(make_response(1, {'id': new_worker.id}, None))
         return JsonResponse(make_response(0, None, request_data.errors), status=400)
-    except:
+    except Exception as e:
+        print(e)
         # print(sys.exc_info()[0])
         return JsonResponse(make_response(0, None, 'server error'), status=500)
 
@@ -48,6 +50,7 @@ def login(request):
         request_data = LoginSerializer(data=request.data)
 
         if request_data.is_valid():
+            # worker = User.objects.get(email=request.data['username'])
             try:
                 worker = Worker.objects.get(email=request.data['username'])
                 if worker.verify_password(request.data['password']):
