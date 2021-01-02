@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['worktime-management.herokuapp.com', '127.0.0.1', '192.168.43.173']
+ALLOWED_HOSTS = ['worktime-management.herokuapp.com', '127.0.0.1', '10.45.17.193', '192.168.43.173', '192.168.1.219', '172.20.10.11']
 
 
 # Application definition
@@ -157,7 +157,7 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # CSRF enable
-CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 # Rest Auth
 REST_FRAMEWORK = {

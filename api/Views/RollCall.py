@@ -1,6 +1,7 @@
 from api.models.Worker import Worker
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.decorators import permission_required
 from ..Constants.Response import make_response
 from ..Serializers import RollCallSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +19,7 @@ def punch_out(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@permission_required('api.add_timesheet')
 def make_roll_call(request):
     try:
         request_data = RollCallSerializer(data=request.data)

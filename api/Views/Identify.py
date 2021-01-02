@@ -11,6 +11,7 @@ import requests
 url = 'http://127.0.0.1:5000/api/'
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def submit_photos(request):
     try:
         data = SubmitPhotoSerializer(data=request.data)
@@ -25,6 +26,7 @@ def submit_photos(request):
         return JsonResponse(make_response(0, None, 'server error'), status=500)
         
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def predict_photo(request):
     try:
         data = PredictPhotoSerializer(data=request.data)
@@ -36,7 +38,7 @@ def predict_photo(request):
                 print(f'{id} - {type(id)} - {Worker.objects.filter(id=id).exists()}')
                 if Worker.objects.filter(id=id).exists():
                     name = Worker.objects.get(id=id).name
-                    return JsonResponse(make_response(1, {'id': response.json()['data']['id'], 'name': name}, None))
+                    return JsonResponse(make_response(1, {'id': id, 'name': name}, None))
                 return JsonResponse(make_response(0, None, 'server error'), status=500)
             else:
                 return JsonResponse(make_response(0, None, 'server error'), status=500)
