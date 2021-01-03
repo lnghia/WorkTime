@@ -1,4 +1,6 @@
 # from api.Util.User import new_user
+from django.http import response
+from django.http.request import HttpRequest
 from rest_framework.authtoken.models import Token
 from api.Util.User_Util import new_user
 from django.db import models
@@ -11,6 +13,9 @@ from datetime import date, datetime
 import datetime as dt
 from django.contrib.auth.models import Group
 from django.contrib.auth import authenticate
+from django.contrib import admin
+import config
+import requests
 
 
 class Worker(models.Model):
@@ -70,3 +75,16 @@ class Worker(models.Model):
         if self.day_num_since_start_of_month(curr_date) > 28:
             self.start_of_month += dt.timedelta(days=28)
             self.save()
+
+class WorkerAdmin(admin.ModelAdmin):
+
+    def delete_model(self, request: HttpRequest, obj) -> None:
+        response = requests.post(config.url+'forget-person/', json={'id': obj.id})
+        print(response.json())
+        if response.json()['is_success']:
+            return super().delete_model(request, obj)
+
+    def delete_queryset(self, request: HttpRequest, queryset) -> None:
+        for qr in queryset:
+            response = requests.post(config.url+'forget-person/', json={'id': qr.id})
+        return super().delete_queryset(request, queryset)

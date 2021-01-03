@@ -7,8 +7,8 @@ from ..Serializers import RollCallSerializer
 from rest_framework.permissions import IsAuthenticated
 from ..Serializers.Identify import *
 import requests
+import config
 
-url = 'http://127.0.0.1:5000/api/'
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -16,7 +16,7 @@ def submit_photos(request):
     try:
         data = SubmitPhotoSerializer(data=request.data)
         if data.is_valid():
-            response = requests.post(url+'submit-photos/', json=request.data)
+            response = requests.post(config.url+'submit-photos/', json=request.data)
             if response.json()['is_success']:
                 return JsonResponse(make_response(1, None, None))
             else:
@@ -32,7 +32,7 @@ def predict_photo(request):
         data = PredictPhotoSerializer(data=request.data)
 
         if data.is_valid():
-            response = requests.post(url+'identify-photo/', json=request.data)
+            response = requests.post(config.url+'identify-photo/', json=request.data)
             id = int(response.json()['data']['id'])
             if response.json()['is_success']:
                 print(f'{id} - {type(id)} - {Worker.objects.filter(id=id).exists()}')
