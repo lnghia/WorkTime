@@ -24,6 +24,7 @@ The apis consists of:
 - /api/login/ return a token to be used with each api call
 - /api/submit-photos/ for feeding portrait images of a new employee
 - /api/identify-photo/ for indentifying a portrait image
+
 You can visit the url /api/api_root/ for more information.
 
 ## Installation
