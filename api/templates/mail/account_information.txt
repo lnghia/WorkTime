@@ -1,0 +1,6 @@
+Your employee account information
+
+Your account has been registered automatically. Please login and change your password !
+Username: <strong>{{ username }} 
+Password: <strong>{{ password }} 
+You can use this account to keep track of your work time from now on !
