@@ -78,13 +78,22 @@ class Worker(models.Model):
 
 class WorkerAdmin(admin.ModelAdmin):
 
+    search_fields = ['name', 'email']
+    list_display = ('name', 'email')
+
     def delete_model(self, request: HttpRequest, obj) -> None:
         response = requests.post(config.url+'forget-person/', json={'id': obj.id})
         print(response.json())
         if response.json()['is_success']:
+            # obj.user.active = False
+            # obj.user.save()
+            obj.user.delete()
             return super().delete_model(request, obj)
 
     def delete_queryset(self, request: HttpRequest, queryset) -> None:
         for qr in queryset:
             response = requests.post(config.url+'forget-person/', json={'id': qr.id})
+            # qr.user.active = False
+            # qr.user.save()
+            qr.user.delete()
         return super().delete_queryset(request, queryset)

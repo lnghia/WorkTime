@@ -15,7 +15,12 @@ def index(request):
 @api_view(['GET'])
 def api_root(request):
     data = {
-        'index': 'https://worktime-management.herokuapp.com/api/',
+        # 'index': 'https://worktime-management.herokuapp.com/api/',
+        'login': 'http://127.0.0.1:8000/api/login/',
+        'new-worker': 'http://127.0.0.1:8000/api/new_worker/',
+        'rollcall': 'http://127.0.0.1:8000/api/roll_call/',
+        'submit-photos': 'http://127.0.0.1:8000/api/submit-photos/',
+        'identify photo': 'http://127.0.0.1:8000/api/identify-photo/'
     }
 
     return Response(data)
