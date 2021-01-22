@@ -35,6 +35,8 @@ After installing all the needed python modules, you need to make migrations usin
 
 To grant access to the admin site, you can run ```python manage.py createsuperuser``` and follow the instructions to create a super user account which has the authority to log in the admin site.
 
+You need to run this script to setup the database properly ```python manage.py shell < db_setup.py```
+
 You also need to set the email username and password using ```export MAIL_USERNAME=''``` and ```export MAIL_PASSWORD=''```, everytime you create a new worker, an account information email contains a generated password will be sent to the registered email for that worker so you need to set the email username and password to configure a smtp service to do so. ```Remember to use email application password instead of you ordirnary password and you need to do this step after openning a new shell since everytime you close a shell, all the environment variables will be reseted```. 
 
 Execute ```python manage.py runserver``` and you are good to go. If you have any further questions or any ideas to improve our application, just let us know and we'll be very grateful for that. Thank you all ! We are having a hard time during this pandemic, be careful and stay safe, you're not alone in this. Wish you guys all the best !!!
